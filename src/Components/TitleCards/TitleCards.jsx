@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './TitleCards.css'
 import cards_data from '../../assets/cards/Cards_data'
 import { Link } from 'react-router-dom';
@@ -16,7 +16,7 @@ const TitleCards = ({title, category}) => {
   method: 'GET',
   headers: {
     accept: 'application/json',
-    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzYzJiYTg1MThhZTgzMzgyYmQxMTZlMmE4YTZkNTgzNCIsIm5iZiI6MTc4NTA3ODkyMy4yMDQsInN1YiI6IjZhNjYyNDhiMjUwNWU1MGEwMzcxZDU4YSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.j6HHVKlc9DLf_1ZZBZoLsfJ9YqYIMBQjn4juXS_aG8Q'
+    Authorization: `Bearer ${import.meta.env.VITE_TMDB_TOKEN}`
   }
 };
 

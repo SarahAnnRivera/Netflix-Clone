@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import './Player.css'
 import back_arrow_icon from '../../assets/back_arrow_icon.png'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -12,14 +12,14 @@ const Player = () => {
     name: "",
     key: "",
     published_at: "",
-    typeof: ""
+    type: ""
   })
 
   const options = {
   method: 'GET',
   headers: {
     accept: 'application/json',
-    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzYzJiYTg1MThhZTgzMzgyYmQxMTZlMmE4YTZkNTgzNCIsIm5iZiI6MTc4NTA3ODkyMy4yMDQsInN1YiI6IjZhNjYyNDhiMjUwNWU1MGEwMzcxZDU4YSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.j6HHVKlc9DLf_1ZZBZoLsfJ9YqYIMBQjn4juXS_aG8Q'
+    Authorization: `Bearer ${import.meta.env.VITE_TMDB_TOKEN}`
   }
 };
 
@@ -27,8 +27,28 @@ useEffect(()=>{
   fetch(`https://api.themoviedb.org/3/movie/${id}/videos?language=en-US`, options)
   .then(res => res.json())
   .then((res) => {
-  console.log("Actual app response:", res);
-  setApiData(res.results[0]);
+ const trailer =
+  res.results.find(
+    (video) =>
+      video.site === "YouTube" &&
+      video.type === "Trailer" &&
+      video.official
+  ) ||
+  res.results.find(
+    (video) =>
+      video.site === "YouTube" &&
+      video.type === "Trailer"
+  ) ||
+  res.results.find(
+    (video) =>
+      video.site === "YouTube" &&
+      video.type === "Teaser"
+  ) ||
+  res.results.find(
+    (video) => video.site === "YouTube"
+  );
+
+setApiData(trailer);
 })
   .catch(err => console.error(err));
 
@@ -41,13 +61,21 @@ useEffect(()=>{
   return (
     <div className='player'>
       <img src={back_arrow_icon} onClick={()=>{navigate(-2)}}/>
-      <iframe width='90%' height='90%' src={`https://www.youtube.com/embed/${apiData.key}`} title='trailer' frameBorder='0' allowFullScreen></iframe>
+      <iframe width='90%' height='90%'  src={`https://www.youtube.com/embed/${apiData.key}?autoplay=1&mute=1&origin=${window.location.origin}`}
+      title='trailer' frameBorder='0' allow="autoplay; encrypted-media" allowFullScreen referrerPolicy="strict-origin-when-cross-origin"></iframe>
       <div className='player-info'>
         <p>{apiData.published_at.slice(0, 10)}</p>
          <p>{apiData.name}</p>
           <p>{apiData.type}</p>
       </div>
-      
+      <a
+  className="youtube-link"
+  href={`https://www.youtube.com/watch?v=${apiData.key}`}
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  Watch Trailer on YouTube
+</a>
     </div>
   )
 }

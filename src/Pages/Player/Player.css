@@ -22,3 +22,16 @@
     justify-content: space-between;
     width: 90%;
 }
+.youtube-link {
+    width: 200px;
+    border:0;
+    outline: 0;
+    padding: 16px;
+    background: #e50914;
+    color: white;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-top: 20px;
+    cursor: pointer;
+}

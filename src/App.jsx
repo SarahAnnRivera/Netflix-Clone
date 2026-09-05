@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import Home from './Pages/Home/Home.jsx'
 import { Routes, Route, useNavigate } from 'react-router-dom'
 import Login from './Pages/Login/Login.jsx'
@@ -11,18 +11,18 @@ const App = () => {
 
   const navigate = useNavigate();
 
-  useEffect(()=>{
-    onAuthStateChanged(auth, async (user)=>{
-      if(user){
-        console.log("Logged In");
-        navigate('/')
-      }else{
-        console.log("Logged Out");
-        navigate('/login');
-      }
+  useEffect(() => {
+  const unsubscribe = onAuthStateChanged(auth, (user) => {
+    console.log("AUTH USER:", user);
+    if (user) {
+  navigate("/", { replace: true });
+} else {
+  navigate("/login", { replace: true });
+}
+  });
 
-    })
-  },[])
+  return () => unsubscribe();
+}, [navigate]);
 
 
   return(
